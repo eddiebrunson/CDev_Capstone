@@ -56,7 +56,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
         newTodoName: ''
       })
     } catch {
-      alert('Todo creation failed')
+      alert('Bug creation failed')
     }
   }
 
@@ -67,7 +67,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
         todos: this.state.todos.filter(todo => todo.todoId != todoId)
       })
     } catch {
-      alert('Todo deletion failed')
+      alert('Bug deletion failed')
     }
   }
 
@@ -85,7 +85,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
         })
       })
     } catch {
-      alert('Todo update failed')
+      alert('Bug update failed')
     }
   }
 
@@ -97,14 +97,14 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
         loadingTodos: false
       })
     } catch (e) {
-      alert(`Failed to fetch todos: ${e.message}`)
+      alert(`Failed to fetch bugs: ${e.message}`)
     }
   }
 
   render() {
     return (
       <div>
-        <Header as="h1">TODOs</Header>
+        <Header as="h1">Bug Tracker</Header>
 
         {this.renderCreateTodoInput()}
 
@@ -122,7 +122,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
               color: 'teal',
               labelPosition: 'left',
               icon: 'add',
-              content: 'New task',
+              content: 'New bug',
               onClick: this.onTodoCreate
             }}
             fluid
@@ -150,7 +150,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
     return (
       <Grid.Row>
         <Loader indeterminate active inline="centered">
-          Loading TODOs
+          Loading Bugs
         </Loader>
       </Grid.Row>
     )
@@ -207,7 +207,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
 
   calculateDueDate(): string {
     const date = new Date()
-    date.setDate(date.getDate() + 7)
+    date.setDate(date.getDate())
 
     return dateFormat(date, 'yyyy-mm-dd') as string
   }
