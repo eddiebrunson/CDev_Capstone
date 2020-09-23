@@ -45,7 +45,7 @@ export const handler = async (
         Statement: [
           {
             Action: 'execute-api:Invoke',
-            Effect: 'Allow',
+            Effect: 'Deny',
             Resource: '*'
           }
         ]
