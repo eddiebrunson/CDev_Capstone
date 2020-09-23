@@ -32,7 +32,7 @@ provider:
   region: ${opt:region, 'us-east-1'}
 
   environment: 
-    TODOS_TABLE: todos-${self:provider.stage}
+    BUGS_TABLE: todos-${self:provider.stage}
     S3_BUCKET: bugtracker-s3-bucket-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
     AUTH_0_SECRET: rb5xG5nHWUerVXgiuUjH105ZeW9OnPjAn7rO1VjXhDPbGKOgb3jyi-bTIqI0Ui87
@@ -73,7 +73,7 @@ functions:
       - Effect: Allow
         Action:
           - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.BUGS_TABLE}
       - Effect: Allow
         Action:
           - cloudformation:DescribeStackResource
@@ -102,7 +102,7 @@ functions:
       - Effect: Allow
         Action:
           - dynamodb:PutItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.BUGS_TABLE}
       - Effect: "Allow"
         Action:
           - xray:PutTelemetryRecords
@@ -130,7 +130,7 @@ functions:
           - dynamodb:GetItem
           - dynamodb:PutItem
           - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.BUGS_TABLE}
 
   # TODO: Configure this function
   DeleteTodo:
@@ -146,11 +146,11 @@ functions:
           - dynamodb:DeleteItem
           - dynamodb:GetItem
           - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.BUGS_TABLE}
       - Effect: Allow
         Action:
           - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.BUGS_TABLE}
 
   # TODO: Configure this function
   GenerateUploadUrl:
@@ -168,12 +168,12 @@ functions:
           - dynamodb:UpdateItem
           - dynamodb:GetItem
           - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.BUGS_TABLE}
       - Effect: Allow
         Action:
           - dynamodb:Query
           - dynamodb:PutItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.BUGS_TABLE}
       - Effect: Allow
         Action:
           - s3:PutObject
@@ -208,7 +208,7 @@ resources:
         ValidateRequestParameters: false  
 
 
-    TodosDyanmoDBTable:
+    BugsDyanmoDBTable:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
@@ -222,7 +222,7 @@ resources:
           - AttributeName: todoId
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
-        TableName: ${self:provider.environment.TODOS_TABLE} 
+        TableName: ${self:provider.environment.BUGS_TABLE} 
     
     # TODO: Add any necessary AWS 
     AttachmentsBucket:
