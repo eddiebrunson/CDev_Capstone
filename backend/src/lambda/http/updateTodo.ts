@@ -12,7 +12,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const todoId = event.pathParameters.todoId
   const updatedTodo: UpdateTodoRequest = JSON.parse(event.body)
 
-  // TODO: Update a TODO item with the provided id using values in the "updatedTodo" object
+  // TODO: Update a bug item with the provided id using values in the "updatedTodo" object
   
   const jwtToken: string = getToken(event.headers.Authorization)
 
