@@ -13,7 +13,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   try{
   const jwtToken: string = getToken(event.headers.Authorization)
   const todoItems = await getTodos(jwtToken)
-  logger.info('Get todos successful')
+  logger.info('Get bugs successful')
   console.log(todoItems)
 
 
@@ -30,7 +30,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
 } catch (error) {
   if(error.statusCode == 403) {
-    console.error('The item does not have an image yet.')
+    console.error('The bug does not have an image yet.')
    }
 
   }
