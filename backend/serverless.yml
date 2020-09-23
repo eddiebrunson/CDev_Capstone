@@ -1,7 +1,7 @@
 org: findsweeddie 
 
 service:
-  name: serverless-todo-app
+  name: serverless-bugtracker-app
 
 plugins:
   - serverless-webpack
@@ -33,7 +33,7 @@ provider:
 
   environment: 
     TODOS_TABLE: todos-${self:provider.stage}
-    S3_BUCKET: todo-s3-bucket-${self:provider.stage}
+    S3_BUCKET: bugtracker-s3-bucket-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
     AUTH_0_SECRET: rb5xG5nHWUerVXgiuUjH105ZeW9OnPjAn7rO1VjXhDPbGKOgb3jyi-bTIqI0Ui87
     S3_BUCKET_URL: https://${self:provider.environment.S3_BUCKET}.s3.amazonaws.com/
@@ -46,9 +46,9 @@ custom:
   documentation:
     api:
       info:
-        version: v1.0.0
-        title: TODO API
-        description: Serverless TODO Application
+        version: v1.1.0
+        title: Bug Tracker API
+        description: Serverless Bug Tracker Application
     models:
       - name: CreateTodo
         contentType: application/json
