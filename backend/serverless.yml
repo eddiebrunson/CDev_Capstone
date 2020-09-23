@@ -1,7 +1,7 @@
 org: findsweeddie 
 
 service:
-  name: serverless-bugtracker-app
+  name: sls-bugtracker-app
 
 plugins:
   - serverless-webpack
