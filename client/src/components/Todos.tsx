@@ -127,7 +127,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
             }}
             fluid
             actionPosition="left"
-            placeholder="To change the world..."
+            placeholder="Enter bug number, line(s), and error code..."
             onChange={this.handleNameChange}
           />
         </Grid.Column>
@@ -209,6 +209,6 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
     const date = new Date()
     date.setDate(date.getDate())
 
-    return dateFormat(date, 'yyyy-mm-dd') as string
+    return dateFormat(date, 'mm-dd-yyyy') as string
   }
 }
