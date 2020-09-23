@@ -17,14 +17,14 @@ export class DataAccess {
       private readonly s3 = new XAWS.S3({ signatureVersion: 'v4' }),
       private readonly bucketName = process.env.S3_BUCKET,
         /*This parameter is the name of the table where todos are stored*/
-      private readonly todosTable = process.env.TODOS_TABLE,
+      private readonly bugsTable = process.env.BUGS_TABLE,
       //private readonly bucketUrl = process.env.S3_BUCKET_URL
     ) { }
 
 async getTodoItems(userId) {
     console.log('Get all todos')
     const result  = await this.docClient. query({
-        TableName: this.todosTable,
+        TableName: this.bugsTable,
         KeyConditionExpression: 'userId = :userId',
         ExpressionAttributeValues: {
             ':userId': userId
@@ -39,7 +39,7 @@ async getTodoItems(userId) {
 async get(todoId, userId){
     const result = await this.docClient
       .query({
-        TableName: this.todosTable,
+        TableName: this.bugsTable,
         KeyConditionExpression: 'todoId = :todoId and userId = :userId',
         ExpressionAttributeValues: {
           ':todoId': todoId,
@@ -56,7 +56,7 @@ async get(todoId, userId){
 async createTodo(todoItem: TodoItem): Promise<TodoItem> { 
     await this.docClient
        .put({
-           TableName: this.todosTable,
+           TableName: this.bugsTable,
            Item: todoItem
        })
        .promise()
@@ -65,7 +65,7 @@ async createTodo(todoItem: TodoItem): Promise<TodoItem> {
 
 async updateTodo(userId: string, todoId: string, updatedTodo: TodoUpdate) {
     const updtedTodo = await this.docClient.update({
-        TableName: this.todosTable,
+        TableName: this.bugsTable,
         Key: { userId, todoId },
         ExpressionAttributeNames: { "#N": "name" },
         UpdateExpression: "set #N=:todoName, dueDate=:dueDate, done=:done",
@@ -84,7 +84,7 @@ async updateTodo(userId: string, todoId: string, updatedTodo: TodoUpdate) {
 
    async updateTodoUrl(updatedTodo: any): Promise<TodoItem> {
     await this.docClient.update({
-        TableName: this.todosTable,
+        TableName: this.bugsTable,
         Key: { 
             todoId: updatedTodo.todoId, 
             userId: updatedTodo.userId },
@@ -110,7 +110,7 @@ async setTodoAttachmentUrl(todoId: string, userId: string): Promise<string> {
      });
      console.log(url);
  await this.docClient.update({
-   TableName: this.todosTable,
+   TableName: this.bugsTable,
    Key: { userId, todoId},
    UpdateExpression: "set attachmentUrl=:URL",
    ExpressionAttributeValues: {
@@ -125,7 +125,7 @@ async setTodoAttachmentUrl(todoId: string, userId: string): Promise<string> {
 
 async deleteTodo(todoId: string, userId: string) {
   const deleteTodo = await this.docClient.delete({
-        TableName: this.todosTable,
+        TableName: this.bugsTable,
         Key: {
             userId: userId,
             todoId: todoId,
