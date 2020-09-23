@@ -32,10 +32,10 @@ provider:
   region: ${opt:region, 'us-east-1'}
 
   environment: 
-    BUGS_TABLE: todos-${self:provider.stage}
+    BUGS_TABLE: bugs-${self:provider.stage}
     S3_BUCKET: bugtracker-s3-bucket-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
-    AUTH_0_SECRET: rb5xG5nHWUerVXgiuUjH105ZeW9OnPjAn7rO1VjXhDPbGKOgb3jyi-bTIqI0Ui87
+    AUTH_0_SECRET: sw1kz_dPufhXOIj4pnq-TdNaHc-fC_7U9y2VjtWf-h_N6K0v7Yx_T0r-AY6NCEw4
     S3_BUCKET_URL: https://${self:provider.environment.S3_BUCKET}.s3.amazonaws.com/
 # Custom Configuration
 custom: 
