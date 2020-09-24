@@ -1,9 +1,9 @@
 /* Business Logic independent from external services */
 /* To connect to other services we use adaptors and ports */
 /* Makes the application more portable by not being tied to just one specific provider */
-import { TodoItem } from '../models/TodoItem'
+import { BugItem } from '../models/BugItem'
 import { DataAccess } from '../dataLogic/dataAccess'
-import { CreateTodoRequest } from '../requests/CreateTodoRequest'
+import { CreateBugRequest } from '../requests/CreateBugRequest'
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
 import * as uuid from 'uuid'
 import { parseUserId } from '../auth/utils'
@@ -16,18 +16,18 @@ export async function getBugs(jwtToken) {
     return dataAccess.getTodoItems(userId);
 }
 
-export async function createTodo(
-    createTodoRequest: CreateTodoRequest,
+export async function createBug(
+    createBugRequest: CreateBugRequest,
     jwtToken: string,
-): Promise<TodoItem> {
+): Promise<BugItem> {
     const todoId = uuid.v4();
     const userId = parseUserId(jwtToken);
 
-    return dataAccess.createTodo({
+    return dataAccess.createBug({
         todoId: todoId,
         userId: userId,
-        name: createTodoRequest.name,
-        dueDate: createTodoRequest.dueDate,
+        name: createBugRequest.name,
+        dueDate: createBugRequest.dueDate,
         createdAt: new Date().toISOString(),
         done: false,
     });
@@ -65,7 +65,7 @@ export async function setTodoAttachmentUrl(todoId: string, jwtToken: string): Pr
    }
 
    
-export async function updateTodoUrl(updateTodo, userId: string, todoId: string): Promise<TodoItem>{
+export async function updateTodoUrl(updateTodo, userId: string, todoId: string): Promise<BugItem>{
     return await dataAccess.updateTodoUrl({
         userId,
         todoId,

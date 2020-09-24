@@ -1,7 +1,7 @@
 /**
- * Fields in a request to create a single TODO item.
+ * Fields in a request to create a single Bug item.
  */
-export interface CreateTodoRequest {
+export interface CreateBugRequest {
   name: string
   dueDate: string
   done: string

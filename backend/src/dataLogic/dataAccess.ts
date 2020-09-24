@@ -2,7 +2,7 @@
 import * as AWS from 'aws-sdk';
 import * as AWSXRAY from 'aws-xray-sdk';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import { TodoItem } from '../models/TodoItem';
+import { BugItem } from '../models/BugItem';
 import { TodoUpdate } from '../models/TodoUpdate';
 import { createLogger } from '../utils/logger'
 
@@ -53,14 +53,14 @@ async get(todoId, userId){
   }
 
 
-async createTodo(todoItem: TodoItem): Promise<TodoItem> { 
+async createBug(bugItem: BugItem): Promise<BugItem> { 
     await this.docClient
        .put({
            TableName: this.bugsTable,
-           Item: todoItem
+           Item: bugItem
        })
        .promise()
-    return todoItem
+    return bugItem
 }
 
 async updateTodo(userId: string, todoId: string, updatedTodo: TodoUpdate) {
@@ -82,7 +82,7 @@ async updateTodo(userId: string, todoId: string, updatedTodo: TodoUpdate) {
  
    }
 
-   async updateTodoUrl(updatedTodo: any): Promise<TodoItem> {
+   async updateTodoUrl(updatedTodo: any): Promise<BugItem> {
     await this.docClient.update({
         TableName: this.bugsTable,
         Key: { 

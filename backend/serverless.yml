@@ -50,12 +50,12 @@ custom:
         title: Bug Tracker API
         description: Serverless Bug Tracker Application
     models:
-      - name: CreateTodo
+      - name: CreateBug
         contentType: application/json
-        schema: ${file(src/models/createTodoModel.json)}
-      - name: UpdateTodo
+        schema: ${file(src/models/createBugModel.json)}
+      - name: UpdateBug
         contentType: application/json
-        schema: ${file(src/models/updateTodoModel.json)}
+        schema: ${file(src/models/updateBugModel.json)}
 functions:
 
   Auth:
@@ -85,19 +85,19 @@ functions:
         Resource: "*"
 
   # TODO: Configure this function
-  CreateTodo:
-    handler: src/lambda/http/createTodo.handler
+  CreateBug:
+    handler: src/lambda/http/createBug.handler
     events:
       - http:
           method: post
-          path: todos
+          path: bugs
           cors: true
           reqValidatorName: RequestValidator
           documentation:
-            summary: add new todo
-            description: add new todo
+            summary: add new bug
+            description: add new bug
             requestModels:
-              'application/json': CreateTodo
+              'application/json': CreateBug
     iamRoleStatements:
       - Effect: Allow
         Action:
