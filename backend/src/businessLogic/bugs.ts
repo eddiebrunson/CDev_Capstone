@@ -13,7 +13,7 @@ const dataAccess = new DataAccess();
 
 export async function getBugs(jwtToken) {
     const userId = parseUserId(jwtToken);
-    return dataAccess.getTodoItems(userId);
+    return dataAccess.getBugItems(userId);
 }
 
 export async function createBug(
