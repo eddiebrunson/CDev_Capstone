@@ -110,19 +110,19 @@ functions:
         Resource: "*"
 
   # TODO: Configure this function
-  UpdateTodo:
-    handler: src/lambda/http/updateTodo.handler
+  UpdateBug:
+    handler: src/lambda/http/updateBug.handler
     events:
       - http:
           method: patch
-          path: todos/{todoId}
+          path: bugs/{bugId}
           cors: true
           reqValidatorName: RequestValidator
           documentation:
-            summary: update todo
-            description: update todo
+            summary: update bug
+            description: update bug
             requestModels:
-              'application/json': UpdateTodo
+              'application/json': UpdateBug
     iamRoleStatements:
       - Effect: Allow
         Action:

@@ -4,7 +4,7 @@
 import { BugItem } from '../models/BugItem'
 import { DataAccess } from '../dataLogic/dataAccess'
 import { CreateBugRequest } from '../requests/CreateBugRequest'
-import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
+import { UpdateBugRequest } from '../requests/UpdateBugRequest'
 import * as uuid from 'uuid'
 import { parseUserId } from '../auth/utils'
 
@@ -33,15 +33,15 @@ export async function createBug(
     });
 }
 
-export async function updateTodo(
+export async function updateBug(
     todoId: string,
-    updateTodoRequest: UpdateTodoRequest,
+    updateBugRequest: UpdateBugRequest,
     jwtToken: string,
 ): Promise<void> {
     const userId = parseUserId(jwtToken);
-    const todo = await dataAccess.get(todoId, userId);
+    const bug = await dataAccess.get(todoId, userId);
 
-    dataAccess.updateTodo(todo.todoId, todo.userId, updateTodoRequest);
+    dataAccess.updateBug(bug.todoId, bug.userId, updateBugRequest);
 }
 
 export async function deleteTodo(

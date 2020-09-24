@@ -3,7 +3,7 @@ import * as AWS from 'aws-sdk';
 import * as AWSXRAY from 'aws-xray-sdk';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { BugItem } from '../models/BugItem';
-import { TodoUpdate } from '../models/TodoUpdate';
+import { BugUpdate } from '../models/BugUpdate';
 import { createLogger } from '../utils/logger'
 
 /* Creates an instance of AWS Clients using XRay SDK */
@@ -63,16 +63,16 @@ async createBug(bugItem: BugItem): Promise<BugItem> {
     return bugItem
 }
 
-async updateTodo(userId: string, todoId: string, updatedTodo: TodoUpdate) {
+async updateBug(userId: string, todoId: string, updatedBug: BugUpdate) {
     const updtedTodo = await this.docClient.update({
         TableName: this.bugsTable,
         Key: { userId, todoId },
         ExpressionAttributeNames: { "#N": "name" },
-        UpdateExpression: "set #N=:todoName, dueDate=:dueDate, done=:done",
+        UpdateExpression: "set #N=:bugName, dueDate=:dueDate, done=:done",
         ExpressionAttributeValues: {
-        ":todoName": updatedTodo.name,
-        ":dueDate": updatedTodo.dueDate,
-        ":done": updatedTodo.done
+        ":bugName": updatedBug.name,
+        ":dueDate": updatedBug.dueDate,
+        ":done": updatedBug.done
          },
          ReturnValues: "UPDATED_NEW"
        })
@@ -82,21 +82,21 @@ async updateTodo(userId: string, todoId: string, updatedTodo: TodoUpdate) {
  
    }
 
-   async updateTodoUrl(updatedTodo: any): Promise<BugItem> {
+   async updateTodoUrl(updatedBug: any): Promise<BugItem> {
     await this.docClient.update({
         TableName: this.bugsTable,
         Key: { 
-            todoId: updatedTodo.todoId, 
-            userId: updatedTodo.userId },
+            todoId: updatedBug.todoId, 
+            userId: updatedBug.userId },
         ExpressionAttributeNames: {"#A": "attachmentUrl"},
         UpdateExpression: "set #A = :attachmentUrl",
         ExpressionAttributeValues: {
-            ":attachmentUrl": updatedTodo.attachmentUrl,
+            ":attachmentUrl": updatedBug.attachmentUrl,
         },
         ReturnValues: "UPDATED_NEW"
     }).promise()
       
-    return updatedTodo
+    return updatedBug
     
 }
 
