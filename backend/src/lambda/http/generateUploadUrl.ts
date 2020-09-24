@@ -2,8 +2,8 @@
 import 'source-map-support/register'
 import { createLogger } from '../../utils/logger'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
-import { setTodoAttachmentUrl } from '../../businessLogic/bugs'
-import { updateTodoUrl } from '../../businessLogic/bugs'
+import { setBugAttachmentUrl } from '../../businessLogic/bugs'
+import { updateBugUrl } from '../../businessLogic/bugs'
 import { getUserId } from '../utils'
 import * as AWSXRay from 'aws-xray-sdk'
 import * as AWS from 'aws-sdk'
@@ -21,19 +21,19 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   logger.info('Processing GenerateUploadUrl', event)
   // TODO: Return a presigned URL to upload a file for a BUG item with the provided id
 
-  const todoId = event.pathParameters.todoId
+  const bugId = event.pathParameters.bugId
   const authorization = event.headers.Authorization;
   const split = authorization.split(' ')
   const jwtToken = split[1]
 
-  const uploadUrl = getUploadUrl(todoId)
+  const uploadUrl = getUploadUrl(bugId)
   const userId = getUserId(event)
-  const updatedTodo = {
-    attachmentUrl: `https://${bucketName}.s3.amazonaws.com/${todoId}`
+  const updatedBug = {
+    attachmentUrl: `https://${bucketName}.s3.amazonaws.com/${bugId}`
   }
-  await updateTodoUrl(updatedTodo, userId, todoId)
+  await updateBugUrl(updatedBug, userId, bugId)
 
- const url = await setTodoAttachmentUrl(todoId,jwtToken)
+ const url = await setBugAttachmentUrl(bugId,jwtToken)
 
   return {
     statusCode: 200,
@@ -48,10 +48,10 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   };
 };
 
-function getUploadUrl(todoId: string) {
+function getUploadUrl(bugId: string) {
   return s3.getSignedUrl('putObject', {
     Bucket: bucketName,
-    Key: todoId,
+    Key: bugId,
     Expires: 10000
   })
 }

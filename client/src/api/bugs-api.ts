@@ -7,7 +7,7 @@ import { UpdateBugRequest } from '../types/UpdateBugRequest';
 export async function getBugs(idToken: string): Promise<Bug[]> {
   console.log('Fetching todos')
 
-  const response = await Axios.get(`${apiEndpoint}/todos`, {
+  const response = await Axios.get(`${apiEndpoint}/bugs`, {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
@@ -19,9 +19,9 @@ export async function getBugs(idToken: string): Promise<Bug[]> {
 
 export async function createBug(
   idToken: string,
-  newTodo: CreateBugRequest
+  newBug: CreateBugRequest
 ): Promise<Bug> {
-  const response = await Axios.post(`${apiEndpoint}/todos`,  JSON.stringify(newTodo), {
+  const response = await Axios.post(`${apiEndpoint}/todos`,  JSON.stringify(newBug), {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
@@ -32,10 +32,10 @@ export async function createBug(
 
 export async function patchBug(
   idToken: string,
-  todoId: string,
+  bugId: string,
   updatedBug: UpdateBugRequest
 ): Promise<void> {
-  await Axios.patch(`${apiEndpoint}/bugs/${todoId}`, JSON.stringify(updatedBug), {
+  await Axios.patch(`${apiEndpoint}/bugs/${bugId}`, JSON.stringify(updatedBug), {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`

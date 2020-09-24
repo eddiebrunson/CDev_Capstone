@@ -69,13 +69,13 @@ export default class App extends Component<AppProps, AppState> {
     if (this.props.auth.isAuthenticated()) {
       return (
         <Menu.Item name="logout" onClick={this.handleLogout}>
-          Log Out
+          Logout
         </Menu.Item>
       )
     } else {
       return (
         <Menu.Item name="login" onClick={this.handleLogin}>
-          Log In
+          Login
         </Menu.Item>
       )
     }

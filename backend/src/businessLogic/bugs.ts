@@ -20,11 +20,11 @@ export async function createBug(
     createBugRequest: CreateBugRequest,
     jwtToken: string,
 ): Promise<BugItem> {
-    const todoId = uuid.v4();
+    const bugId = uuid.v4();
     const userId = parseUserId(jwtToken);
 
     return dataAccess.createBug({
-        todoId: todoId,
+        bugId: bugId,
         userId: userId,
         name: createBugRequest.name,
         dueDate: createBugRequest.dueDate,
@@ -34,41 +34,40 @@ export async function createBug(
 }
 
 export async function updateBug(
-    todoId: string,
+    bugId: string,
     updateBugRequest: UpdateBugRequest,
     jwtToken: string,
 ): Promise<void> {
     const userId = parseUserId(jwtToken);
-    const bug = await dataAccess.get(todoId, userId);
+    const bug = await dataAccess.get(bugId, userId);
 
-    dataAccess.updateBug(bug.todoId, bug.userId, updateBugRequest);
+    dataAccess.updateBug(bug.bugId, bug.userId, updateBugRequest);
 }
 
-export async function deleteTodo(
-    todoId: string,
+export async function deleteBug(
+    bugId: string,
     jwtToken: string,
 ): Promise<void> {
     const userId = parseUserId(jwtToken);
-    const todo = await dataAccess.get(todoId, userId);
+    const bug = await dataAccess.get(bugId, userId);
 
-    await dataAccess.deleteTodo(todo.todoId, todo.userId);
+    await dataAccess.deleteBug(bug.bugId, bug.userId);
 }
 
-export async function setTodoAttachmentUrl(todoId: string, jwtToken: string): Promise<string> {
+export async function setBugAttachmentUrl(bugId: string, jwtToken: string): Promise<string> {
     const userId = parseUserId(jwtToken)
     console.log("Setting Item URL")
-    console.log(todoId)
+    console.log(bugId)
     console.log("userId:",userId)
-    //const todoItem = await dataAccess.get(todoId, userId)
-    const url = await dataAccess.setTodoAttachmentUrl(todoId, userId);
+    const url = await dataAccess.setBugAttachmentUrl(bugId, userId);
    return url
    }
 
    
-export async function updateTodoUrl(updateTodo, userId: string, todoId: string): Promise<BugItem>{
-    return await dataAccess.updateTodoUrl({
+export async function updateBugUrl(updateBug, userId: string, bugId: string): Promise<BugItem>{
+    return await dataAccess.updateBugUrl({
         userId,
-        todoId,
-        attachmentUrl: updateTodo.attachmentUrl,
+        bugId,
+        attachmentUrl: updateBug.attachmentUrl,
     })
 }

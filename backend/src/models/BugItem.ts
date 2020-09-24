@@ -2,7 +2,7 @@
 
 export interface BugItem {
   userId: string
-  todoId: string
+  bugId: string
   createdAt: string
   name: string
   dueDate: string

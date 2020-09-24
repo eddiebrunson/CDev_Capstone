@@ -36,13 +36,13 @@ async getTodoItems(userId) {
    return result.Items
 }
 
-async get(todoId, userId){
+async get(bugId, userId){
     const result = await this.docClient
       .query({
         TableName: this.bugsTable,
-        KeyConditionExpression: 'todoId = :todoId and userId = :userId',
+        KeyConditionExpression: 'bugId = :bugId and userId = :userId',
         ExpressionAttributeValues: {
-          ':todoId': todoId,
+          ':bugId': bugId,
           ':userId': userId,
         },
       })
@@ -63,10 +63,10 @@ async createBug(bugItem: BugItem): Promise<BugItem> {
     return bugItem
 }
 
-async updateBug(userId: string, todoId: string, updatedBug: BugUpdate) {
-    const updtedTodo = await this.docClient.update({
+async updateBug(userId: string, bugId: string, updatedBug: BugUpdate) {
+    const updtedBug = await this.docClient.update({
         TableName: this.bugsTable,
-        Key: { userId, todoId },
+        Key: { userId, bugId },
         ExpressionAttributeNames: { "#N": "name" },
         UpdateExpression: "set #N=:bugName, dueDate=:dueDate, done=:done",
         ExpressionAttributeValues: {
@@ -78,15 +78,15 @@ async updateBug(userId: string, todoId: string, updatedBug: BugUpdate) {
        })
 
        .promise();
-     return { Updated: updtedTodo };
+     return { Updated: updtedBug };
  
    }
 
-   async updateTodoUrl(updatedBug: any): Promise<BugItem> {
+   async updateBugUrl(updatedBug: any): Promise<BugItem> {
     await this.docClient.update({
         TableName: this.bugsTable,
         Key: { 
-            todoId: updatedBug.todoId, 
+            bugId: updatedBug.bugId, 
             userId: updatedBug.userId },
         ExpressionAttributeNames: {"#A": "attachmentUrl"},
         UpdateExpression: "set #A = :attachmentUrl",
@@ -100,18 +100,18 @@ async updateBug(userId: string, todoId: string, updatedBug: BugUpdate) {
     
 }
 
-async setTodoAttachmentUrl(todoId: string, userId: string): Promise<string> {
+async setBugAttachmentUrl(bugId: string, userId: string): Promise<string> {
    logger.info('Generating upload Url')
    console.log('Generating upload Url')
      const url = await this.s3.getSignedUrl('putObject', {
          Bucket: this.bucketName,
-         Key: todoId,
+         Key: bugId,
          Expires: 10000,
      });
      console.log(url);
  await this.docClient.update({
    TableName: this.bugsTable,
-   Key: { userId, todoId},
+   Key: { userId, bugId},
    UpdateExpression: "set attachmentUrl=:URL",
    ExpressionAttributeValues: {
      ":URL": url.split("?")[0]
@@ -123,15 +123,15 @@ async setTodoAttachmentUrl(todoId: string, userId: string): Promise<string> {
  }
 
 
-async deleteTodo(todoId: string, userId: string) {
-  const deleteTodo = await this.docClient.delete({
+async deleteBug(bugId: string, userId: string) {
+  const deleteBug = await this.docClient.delete({
         TableName: this.bugsTable,
         Key: {
             userId: userId,
-            todoId: todoId,
+            bugId: bugId,
           },
         })
         .promise();
-      return { Deleted: deleteTodo };
+      return { Deleted: deleteBug };
     }
 }
