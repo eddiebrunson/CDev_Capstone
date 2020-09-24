@@ -62,12 +62,12 @@ functions:
     handler: src/lambda/auth/auth0Authorizer.handler
 
   # TODO: Configure this function
-  GetTodos:
-    handler: src/lambda/http/getTodos.handler
+  GetBugs:
+    handler: src/lambda/http/getBugs.handler
     events:
       - http:
           method: get
-          path: todos
+          path: bugs
           cors: true
     iamRoleStatements:
       - Effect: Allow
