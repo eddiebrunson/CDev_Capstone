@@ -20,7 +20,7 @@ export interface AppState {}
 export default class App extends Component<AppProps, AppState> {
   constructor(props: AppProps) {
     super(props)
-    
+
     this.handleLogin = this.handleLogin.bind(this)
     this.handleLogout = this.handleLogout.bind(this)
   }
@@ -97,7 +97,7 @@ export default class App extends Component<AppProps, AppState> {
         />
 
         <Route
-          path="/todos/:todoId/edit"
+          path="/bugs/:todoId/edit"
           exact
           render={props => {
             return <EditTodo {...props} auth={this.props.auth} />
