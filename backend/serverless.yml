@@ -133,12 +133,12 @@ functions:
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.BUGS_TABLE}
 
   # TODO: Configure this function
-  DeleteTodo:
-    handler: src/lambda/http/deleteTodo.handler
+  DeleteBug:
+    handler: src/lambda/http/deleteBug.handler
     events:
       - http:
           method: delete
-          path: todos/{todoId}
+          path: bugs/{bugId}
           cors: true
     iamRoleStatements:
       - Effect: Allow
@@ -159,7 +159,7 @@ functions:
       - http:
           authorizer: Auth
           method: post
-          path: todos/{todoId}/attachment
+          path: bugs/{bugId}/attachment
           cors: true 
           origin: '*'    
     iamRoleStatements:
@@ -214,12 +214,12 @@ resources:
         AttributeDefinitions:
           - AttributeName: userId
             AttributeType: S
-          - AttributeName: todoId
+          - AttributeName: bugId
             AttributeType: S
         KeySchema:
           - AttributeName: userId
             KeyType: HASH
-          - AttributeName: todoId
+          - AttributeName: bugId
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.BUGS_TABLE} 

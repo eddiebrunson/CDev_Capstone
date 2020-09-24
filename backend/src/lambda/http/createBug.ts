@@ -11,12 +11,12 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
   logger.info('new bug item', event);
 
-  const newTodo: CreateBugRequest = JSON.parse(event.body);
+  const newBug: CreateBugRequest = JSON.parse(event.body);
   const authorization = event.headers.Authorization;
   const split = authorization.split(' ');
   const jwtToken = split[1];
   
-  const newItem = await createBug(newTodo, jwtToken);
+  const newItem = await createBug(newBug, jwtToken);
   return {
       statusCode: 201,
       headers: {
