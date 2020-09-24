@@ -119,7 +119,7 @@ export class Bugs extends React.PureComponent<BugsProps, BugsState> {
         <Grid.Column width={16}>
           <Input
             action={{
-              color: 'teal',
+              color: 'green',
               labelPosition: 'left',
               icon: 'add',
               content: 'New bug',
