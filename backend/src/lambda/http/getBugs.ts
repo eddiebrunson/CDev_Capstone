@@ -1,5 +1,5 @@
 import 'source-map-support/register'
-import { getBugItems } from '../../businessLogic/bugs'
+import { getBugs } from '../../businessLogic/bugs'
 import { createLogger } from '../../utils/logger'
 import { getToken } from '../../helpers/authHelper'
 
@@ -11,7 +11,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   logger.info('Processing GetBugs Event: ', event)
   try{
   const jwtToken: string = getToken(event.headers.Authorization)
-  const bugItems = await getBugItems(jwtToken)
+  const bugItems = await getBugs(jwtToken)
   logger.info('Get bugs successful')
   console.log(bugItems)
 
