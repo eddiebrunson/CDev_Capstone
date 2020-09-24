@@ -5,7 +5,7 @@ import Axios from 'axios'
 import { UpdateBugRequest } from '../types/UpdateBugRequest';
 
 export async function getBugs(idToken: string): Promise<Bug[]> {
-  console.log('Fetching todos')
+  console.log('Fetching bugs')
 
   const response = await Axios.get(`${apiEndpoint}/bugs`, {
     headers: {
@@ -21,7 +21,7 @@ export async function createBug(
   idToken: string,
   newBug: CreateBugRequest
 ): Promise<Bug> {
-  const response = await Axios.post(`${apiEndpoint}/todos`,  JSON.stringify(newBug), {
+  const response = await Axios.post(`${apiEndpoint}/bugs`,  JSON.stringify(newBug), {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
