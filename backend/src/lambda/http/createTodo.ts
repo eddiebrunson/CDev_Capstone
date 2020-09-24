@@ -1,12 +1,12 @@
 import 'source-map-support/register'
 
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'
-import { createTodo } from '../../businessLogic/todos'
+import { createTodo } from '../../businessLogic/bugs'
 import { createLogger } from '../../utils/logger';
 import { CreateTodoRequest } from '../../requests/CreateTodoRequest';
 
 const logger = createLogger('createTodoHandler');
-
+//Create a BUG item 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
 
   logger.info('new todo item', event);
