@@ -10,13 +10,13 @@ const logger = createLogger('bugs')
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   logger.info('Processing UpdateBug Event: ', event)
   const todoId = event.pathParameters.todoId
-  const updatedTodo: UpdateBugRequest = JSON.parse(event.body)
+  const updatedBug: UpdateBugRequest = JSON.parse(event.body)
 
   // TODO: Update a bug item with the provided id using values in the "updatedBug" object
   
   const jwtToken: string = getToken(event.headers.Authorization)
 
-  await updateBug(todoId, updatedTodo, jwtToken);
+  await updateBug(todoId, updatedBug, jwtToken);
 
   return {
     statusCode: 204,

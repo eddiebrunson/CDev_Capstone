@@ -11,9 +11,9 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   logger.info('Processing GetBugs Event: ', event)
   try{
   const jwtToken: string = getToken(event.headers.Authorization)
-  const todoItems = await getBugs(jwtToken)
+  const bugItems = await getBugs(jwtToken)
   logger.info('Get bugs successful')
-  console.log(todoItems)
+  console.log(bugItems)
 
 
   return {
@@ -23,7 +23,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       'Access-Control-Allow-Credentials': true
     },
     body: JSON.stringify({
-      items: todoItems,
+      items: bugItems,
     })
   }
 
