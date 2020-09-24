@@ -2,8 +2,8 @@
 import 'source-map-support/register'
 import { createLogger } from '../../utils/logger'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
-import { setTodoAttachmentUrl } from '../../businessLogic/todos'
-import { updateTodoUrl } from '../../businessLogic/todos'
+import { setTodoAttachmentUrl } from '../../businessLogic/bugs'
+import { updateTodoUrl } from '../../businessLogic/bugs'
 import { getUserId } from '../utils'
 import * as AWSXRay from 'aws-xray-sdk'
 import * as AWS from 'aws-sdk'
@@ -19,7 +19,7 @@ const bucketName = process.env.S3_BUCKET
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   logger.info('Processing GenerateUploadUrl', event)
-  // TODO: Return a presigned URL to upload a file for a TODO item with the provided id
+  // TODO: Return a presigned URL to upload a file for a BUG item with the provided id
 
   const todoId = event.pathParameters.todoId
   const authorization = event.headers.Authorization;
