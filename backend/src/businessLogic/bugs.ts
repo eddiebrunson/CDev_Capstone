@@ -11,7 +11,7 @@ import { parseUserId } from '../auth/utils'
 
 const dataAccess = new DataAccess();
 
-export async function getBugs(jwtToken) {
+export async function getBugItems(jwtToken) {
     const userId = parseUserId(jwtToken);
     return dataAccess.getBugItems(userId);
 }

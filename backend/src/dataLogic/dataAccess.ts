@@ -16,13 +16,13 @@ export class DataAccess {
       private readonly docClient: DocumentClient = new XAWS.DynamoDB.DocumentClient(),
       private readonly s3 = new XAWS.S3({ signatureVersion: 'v4' }),
       private readonly bucketName = process.env.S3_BUCKET,
-        /*This parameter is the name of the table where todos are stored*/
+        /*This parameter is the name of the table where all BUGS are stored*/
       private readonly bugsTable = process.env.BUGS_TABLE,
       //private readonly bucketUrl = process.env.S3_BUCKET_URL
     ) { }
 
-async getTodoItems(userId) {
-    console.log('Get all todos')
+async getBugItems(userId) {
+    console.log('Get all bugs')
     const result  = await this.docClient. query({
         TableName: this.bugsTable,
         KeyConditionExpression: 'userId = :userId',
