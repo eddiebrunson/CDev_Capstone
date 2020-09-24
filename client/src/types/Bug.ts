@@ -1,5 +1,5 @@
-export interface Todo {
-  todoId: string
+export interface Bug {
+  bugId: string
   createdAt: string
   name: string
   dueDate: string

@@ -1,10 +1,10 @@
 import { apiEndpoint } from '../config'
-import { Todo } from '../types/Todo';
-import { CreateTodoRequest } from '../types/CreateTodoRequest';
+import { Bug } from '../types/Bug';
+import { CreateBugRequest } from '../types/CreateBugRequest';
 import Axios from 'axios'
-import { UpdateTodoRequest } from '../types/UpdateTodoRequest';
+import { UpdateBugRequest } from '../types/UpdateBugRequest';
 
-export async function getTodos(idToken: string): Promise<Todo[]> {
+export async function getBugs(idToken: string): Promise<Bug[]> {
   console.log('Fetching todos')
 
   const response = await Axios.get(`${apiEndpoint}/todos`, {
@@ -13,14 +13,14 @@ export async function getTodos(idToken: string): Promise<Todo[]> {
       'Authorization': `Bearer ${idToken}`
     },
   })
-  console.log('Todos:', response.data)
+  console.log('Bugs:', response.data)
   return response.data.items
 }
 
-export async function createTodo(
+export async function createBug(
   idToken: string,
-  newTodo: CreateTodoRequest
-): Promise<Todo> {
+  newTodo: CreateBugRequest
+): Promise<Bug> {
   const response = await Axios.post(`${apiEndpoint}/todos`,  JSON.stringify(newTodo), {
     headers: {
       'Content-Type': 'application/json',
@@ -30,12 +30,12 @@ export async function createTodo(
   return response.data.item
 }
 
-export async function patchTodo(
+export async function patchBug(
   idToken: string,
   todoId: string,
-  updatedTodo: UpdateTodoRequest
+  updatedBug: UpdateBugRequest
 ): Promise<void> {
-  await Axios.patch(`${apiEndpoint}/todos/${todoId}`, JSON.stringify(updatedTodo), {
+  await Axios.patch(`${apiEndpoint}/bugs/${todoId}`, JSON.stringify(updatedBug), {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
@@ -43,11 +43,11 @@ export async function patchTodo(
   })
 }
 
-export async function deleteTodo(
+export async function deleteBug(
   idToken: string,
-  todoId: string
+  bugId: string
 ): Promise<void> {
-  await Axios.delete(`${apiEndpoint}/todos/${todoId}`, {
+  await Axios.delete(`${apiEndpoint}/bugs/${bugId}`, {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
@@ -57,9 +57,9 @@ export async function deleteTodo(
 
 export async function getUploadUrl(
   idToken: string,
-  todoId: string
+  bugId: string
 ): Promise<string> {
-  const response = await Axios.post(`${apiEndpoint}/todos/${todoId}/attachment`, '', {
+  const response = await Axios.post(`${apiEndpoint}/bugs/${bugId}/attachment`, '', {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`

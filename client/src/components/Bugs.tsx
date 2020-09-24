@@ -14,74 +14,74 @@ import {
   Loader
 } from 'semantic-ui-react'
 
-import { createTodo, deleteTodo, getTodos, patchTodo } from '../api/todos-api'
+import { createBug, deleteBug, getBugs, patchBug } from '../api/bugs-api'
 import Auth from '../auth/Auth'
-import { Todo } from '../types/Todo'
+import { Bug } from '../types/Bug'
 
-interface TodosProps {
+interface BugsProps {
   auth: Auth
   history: History
 }
 
-interface TodosState {
-  todos: Todo[]
-  newTodoName: string
-  loadingTodos: boolean
+interface BugsState {
+  bugs: Bug[]
+  newBugName: string
+  loadingBugs: boolean
 }
 
-export class Todos extends React.PureComponent<TodosProps, TodosState> {
-  state: TodosState = {
-    todos: [],
-    newTodoName: '',
-    loadingTodos: true
+export class Bugs extends React.PureComponent<BugsProps, BugsState> {
+  state: BugsState = {
+    bugs: [],
+    newBugName: '',
+    loadingBugs: true
   }
 
   handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ newTodoName: event.target.value })
+    this.setState({ newBugName: event.target.value })
   }
 
-  onEditButtonClick = (todoId: string) => {
-    this.props.history.push(`/todos/${todoId}/edit`)
+  onEditButtonClick = (bugId: string) => {
+    this.props.history.push(`/bugs/${bugId}/edit`)
   }
 
-  onTodoCreate = async (event: React.ChangeEvent<HTMLButtonElement>) => {
+  onBugCreate = async (event: React.ChangeEvent<HTMLButtonElement>) => {
     try {
       const dueDate = this.calculateDueDate()
-      const newTodo = await createTodo(this.props.auth.getIdToken(), {
-        name: this.state.newTodoName,
+      const newBug = await createBug(this.props.auth.getIdToken(), {
+        name: this.state.newBugName,
         dueDate
       })
       this.setState({
-        todos: [...this.state.todos, newTodo],
-        newTodoName: ''
+        bugs: [...this.state.bugs, newBug],
+        newBugName: ''
       })
     } catch {
       alert('Bug creation failed')
     }
   }
 
-  onTodoDelete = async (todoId: string) => {
+  onBugDelete = async (bugId: string) => {
     try {
-      await deleteTodo(this.props.auth.getIdToken(), todoId)
+      await deleteBug(this.props.auth.getIdToken(), bugId)
       this.setState({
-        todos: this.state.todos.filter(todo => todo.todoId != todoId)
+        bugs: this.state.bugs.filter(bug => bug.bugId != bugId)
       })
     } catch {
       alert('Bug deletion failed')
     }
   }
 
-  onTodoCheck = async (pos: number) => {
+  onBugCheck = async (pos: number) => {
     try {
-      const todo = this.state.todos[pos]
-      await patchTodo(this.props.auth.getIdToken(), todo.todoId, {
-        name: todo.name,
-        dueDate: todo.dueDate,
-        done: !todo.done
+      const bug = this.state.bugs[pos]
+      await patchBug(this.props.auth.getIdToken(), bug.bugId, {
+        name: bug.name,
+        dueDate: bug.dueDate,
+        done: !bug.done
       })
       this.setState({
-        todos: update(this.state.todos, {
-          [pos]: { done: { $set: !todo.done } }
+        bugs: update(this.state.bugs, {
+          [pos]: { done: { $set: !bug.done } }
         })
       })
     } catch {
@@ -91,10 +91,10 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
 
   async componentDidMount() {
     try {
-      const todos = await getTodos(this.props.auth.getIdToken())
+      const bugs = await getBugs(this.props.auth.getIdToken())
       this.setState({
-        todos,
-        loadingTodos: false
+        bugs,
+        loadingBugs: false
       })
     } catch (e) {
       alert(`Failed to fetch bugs: ${e.message}`)
@@ -106,14 +106,14 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
       <div>
         <Header as="h1">Bug Tracker</Header>
 
-        {this.renderCreateTodoInput()}
+        {this.renderCreateBugInput()}
 
-        {this.renderTodos()}
+        {this.renderBugs()}
       </div>
     )
   }
 
-  renderCreateTodoInput() {
+  renderCreateBugInput() {
     return (
       <Grid.Row>
         <Grid.Column width={16}>
@@ -123,7 +123,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
               labelPosition: 'left',
               icon: 'add',
               content: 'New bug',
-              onClick: this.onTodoCreate
+              onClick: this.onBugCreate
             }}
             fluid
             actionPosition="left"
@@ -138,12 +138,12 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
     )
   }
 
-  renderTodos() {
-    if (this.state.loadingTodos) {
+  renderBugs() {
+    if (this.state.loadingBugs) {
       return this.renderLoading()
     }
 
-    return this.renderTodosList()
+    return this.renderBugsList()
   }
 
   renderLoading() {
@@ -156,29 +156,29 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
     )
   }
 
-  renderTodosList() {
+  renderBugsList() {
     return (
       <Grid padded>
-        {this.state.todos.map((todo, pos) => {
+        {this.state.bugs.map((bug, pos) => {
           return (
-            <Grid.Row key={todo.todoId}>
+            <Grid.Row key={bug.bugId}>
               <Grid.Column width={1} verticalAlign="middle">
                 <Checkbox
-                  onChange={() => this.onTodoCheck(pos)}
-                  checked={todo.done}
+                  onChange={() => this.onBugCheck(pos)}
+                  checked={bug.done}
                 />
               </Grid.Column>
               <Grid.Column width={10} verticalAlign="middle">
-                {todo.name}
+                {bug.name}
               </Grid.Column>
               <Grid.Column width={3} floated="right">
-                {todo.dueDate}
+                {bug.dueDate}
               </Grid.Column>
               <Grid.Column width={1} floated="right">
                 <Button
                   icon
                   color="blue"
-                  onClick={() => this.onEditButtonClick(todo.todoId)}
+                  onClick={() => this.onEditButtonClick(bug.bugId)}
                 >
                   <Icon name="pencil" />
                 </Button>
@@ -187,13 +187,13 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
                 <Button
                   icon
                   color="red"
-                  onClick={() => this.onTodoDelete(todo.todoId)}
+                  onClick={() => this.onBugDelete(bug.bugId)}
                 >
                   <Icon name="delete" />
                 </Button>
               </Grid.Column>
-              {todo.attachmentUrl && (
-                <Image src={todo.attachmentUrl} size="small" wrapped />
+              {bug.attachmentUrl && (
+                <Image src={bug.attachmentUrl} size="small" wrapped />
               )}
               <Grid.Column width={16}>
                 <Divider />
@@ -207,7 +207,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
 
   calculateDueDate(): string {
     const date = new Date()
-    date.setDate(date.getDate())
+    date.setDate(date.getDate() + 7)
 
     return dateFormat(date, 'mm-dd-yyyy') as string
   }
