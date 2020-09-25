@@ -209,6 +209,6 @@ export class Bugs extends React.PureComponent<BugsProps, BugsState> {
     const date = new Date()
     date.setDate(date.getDate() + 7)
 
-    return dateFormat(date, 'mm-dd-yyyy') as string
+    return dateFormat(date, 'Due by:mm-dd-yyyy') as string
   }
 }
