@@ -11,7 +11,10 @@ import {
   Icon,
   Input,
   Image,
-  Loader
+  Loader,
+  FormField,
+  Form,
+  TextArea
 } from 'semantic-ui-react'
 
 import { createBug, deleteBug, getBugs, patchBug } from '../api/bugs-api'
@@ -26,6 +29,7 @@ interface BugsProps {
 interface BugsState {
   bugs: Bug[]
   newBugName: string
+  messageDetials: string
   loadingBugs: boolean
 }
 
@@ -33,6 +37,7 @@ export class Bugs extends React.PureComponent<BugsProps, BugsState> {
   state: BugsState = {
     bugs: [],
     newBugName: '',
+    messageDetials: '',
     loadingBugs: true
   }
 
@@ -44,12 +49,13 @@ export class Bugs extends React.PureComponent<BugsProps, BugsState> {
     this.props.history.push(`/bugs/${bugId}/edit`)
   }
 
-  onBugCreate = async (event: React.ChangeEvent<HTMLButtonElement>) => {
+  onBugCreate = async() => {
     try {
       const dueDate = this.calculateDueDate()
       const newBug = await createBug(this.props.auth.getIdToken(), {
         name: this.state.newBugName,
-        dueDate
+        dueDate,
+        message: this.state.messageDetials,
       })
       this.setState({
         bugs: [...this.state.bugs, newBug],
@@ -117,19 +123,18 @@ export class Bugs extends React.PureComponent<BugsProps, BugsState> {
     return (
       <Grid.Row>
         <Grid.Column width={16}>
-          <Input
-            action={{
-              color: 'green',
-              labelPosition: 'left',
-              icon: 'add',
-              content: 'New bug',
-              onClick: this.onBugCreate
-            }}
-            fluid
-            actionPosition="left"
-            placeholder="Enter bug number, line(s), and error code..."
-            onChange={this.handleNameChange}
-          />
+          <Form>
+            <FormField>
+              <Input placeholder="Enter File name here..." onChange={this.handleNameChange} fluid />
+              </FormField>
+              <FormField> 
+                <TextArea id="message" placeholder="Enter error code message/details here..." onChange={(e, { value }) =>
+                 this.state.messageDetials = value as string } />
+              </FormField>
+              <FormField> 
+                <Button color="green" onClick={this.onBugCreate}>New Bug</Button>
+              </FormField>
+              </Form>
         </Grid.Column>
         <Grid.Column width={16}>
           <Divider />
@@ -170,6 +175,9 @@ export class Bugs extends React.PureComponent<BugsProps, BugsState> {
               </Grid.Column>
               <Grid.Column width={10} verticalAlign="middle">
                 {bug.name}
+              </Grid.Column>
+              <Grid.Column width={10} verticalAlign="middle">
+                {bug.message}
               </Grid.Column>
               <Grid.Column width={3} floated="right">
                 {bug.dueDate}

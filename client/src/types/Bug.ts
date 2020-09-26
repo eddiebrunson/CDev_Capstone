@@ -5,4 +5,5 @@ export interface Bug {
   dueDate: string
   done: boolean
   attachmentUrl?: string
+  message: string
 }
