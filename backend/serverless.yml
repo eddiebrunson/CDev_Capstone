@@ -38,7 +38,7 @@ provider:
     AUTH_0_SECRET: sw1kz_dPufhXOIj4pnq-TdNaHc-fC_7U9y2VjtWf-h_N6K0v7Yx_T0r-AY6NCEw4
     S3_BUCKET_URL: https://${self:provider.environment.S3_BUCKET}.s3.amazonaws.com/
     UPLOAD_TOPIC_ARN: 
-      fn::Join:
+      Fn::Join:
         - ':'
         - - arn:aws:sns
         - Ref: AWS::Region
