@@ -37,12 +37,20 @@ provider:
     SIGNED_URL_EXPIRATION: 300
     AUTH_0_SECRET: sw1kz_dPufhXOIj4pnq-TdNaHc-fC_7U9y2VjtWf-h_N6K0v7Yx_T0r-AY6NCEw4
     S3_BUCKET_URL: https://${self:provider.environment.S3_BUCKET}.s3.amazonaws.com/
+    UPLOAD_TOPIC_ARN: 
+      fn::Join:
+        - ':'
+        - - arn:aws:sns
+        - Ref: AWS::Region
+        - Ref: AWS::AccountId
+        - ${self:custom.topicName}
+
 # Custom Configuration
 custom: 
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules: false
-
+  topicName: UploadTopic-${self.provider.stage}
   documentation:
     api:
       info:
@@ -61,7 +69,7 @@ functions:
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
 
-  # TODO: Configure this function
+  # GetBugs: lambda function to get all BUG items
   GetBugs:
     handler: src/lambda/http/getBugs.handler
     events:
@@ -84,7 +92,7 @@ functions:
           - xray:PutTraceSegments
         Resource: "*"
 
-  # TODO: Configure this function
+  # CreateBug: lambda function to create Bug items
   CreateBug:
     handler: src/lambda/http/createBug.handler
     events:
@@ -109,7 +117,7 @@ functions:
           - xray:PutTraceSegments
         Resource: "*"
 
-  # TODO: Configure this function
+  # UpdateBug: lambda function to update a BUG
   UpdateBug:
     handler: src/lambda/http/updateBug.handler
     events:
@@ -132,7 +140,7 @@ functions:
           - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.BUGS_TABLE}
 
-  # TODO: Configure this function
+  # DeleteBug: lambda function to delete a BUG
   DeleteBug:
     handler: src/lambda/http/deleteBug.handler
     events:
@@ -152,7 +160,7 @@ functions:
           - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.BUGS_TABLE}
 
-  # TODO: Configure this function
+  # GenerateUploadUrl: lambda function to generate the image upload url
   GenerateUploadUrl:
     handler: src/lambda/http/generateUploadUrl.handler
     events:
@@ -224,11 +232,16 @@ resources:
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.BUGS_TABLE} 
     
-    # TODO: Add any necessary AWS 
+    # Necessary AWS bucket permissions and policies
     AttachmentsBucket:
       Type: AWS::S3::Bucket
+      DependsOn: SNSTopicPolicy
       Properties:
         BucketName: ${self:provider.environment.S3_BUCKET}
+        NotificationConfiguration:
+          TopicConfigurations:
+            - Event: s3:ObjectCreated:PutItem
+              Topic: !Ref UploadTopic 
         CorsConfiguration:
           CorsRules:
             -
@@ -260,3 +273,27 @@ resources:
                 - s3:PutObjectAcl
               Resource: 'arn:aws:s3:::${self:provider.environment.S3_BUCKET}/*'
         Bucket: !Ref AttachmentsBucket
+    
+    SNSTopicPolicy: 
+      Type: AWS::SNS::TopicPolicy
+      Properties:
+        PolicyDocument: 
+          Version: "2012-10-17"
+          Statement: 
+            - Effect: Allow 
+              Principal: 
+                AWS: "*"
+              Action: sns:Publish
+              Resource: 
+                !Ref UploadTopic
+              Condition: 
+                ArnLike: 
+                  AWS:SourceArn: arn:aws:s3:::${self:provider.environment.S3_BUCKET}
+        Topics: 
+          - !Ref UploadTopic
+
+    UploadTopic: 
+      Type: AWS::SNS::Topic
+      Properties: 
+        DisplayName: Upload bucket topic
+        TopicName: ${self:custom.topicName}
