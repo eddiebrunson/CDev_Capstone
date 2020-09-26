@@ -7,4 +7,5 @@ export interface CreateBugRequest {
   done: string
   createdAt: string
   attachmentUrl: string
+  message: string
 }

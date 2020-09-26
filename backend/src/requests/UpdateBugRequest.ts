@@ -5,4 +5,5 @@ export interface UpdateBugRequest {
   name: string
   dueDate: string
   done: boolean
+  message: string
 }

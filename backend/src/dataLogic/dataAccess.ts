@@ -67,12 +67,13 @@ async updateBug(userId: string, bugId: string, updatedBug: BugUpdate) {
     const updtedBug = await this.docClient.update({
         TableName: this.bugsTable,
         Key: { userId, bugId },
-        ExpressionAttributeNames: { "#N": "name" },
+        ExpressionAttributeNames: { "#N": "name" , "#M": "message" },
         UpdateExpression: "set #N=:bugName, dueDate=:dueDate, done=:done",
         ExpressionAttributeValues: {
         ":bugName": updatedBug.name,
         ":dueDate": updatedBug.dueDate,
-        ":done": updatedBug.done
+        ":done": updatedBug.done,
+        ":message": updatedBug.message,
          },
          ReturnValues: "UPDATED_NEW"
        })
