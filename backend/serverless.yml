@@ -41,9 +41,9 @@ provider:
       Fn::Join:
         - ':'
         - - arn:aws:sns
-        - Ref: AWS::Region
-        - Ref: AWS::AccountId
-        - ${self:custom.topicName}
+          - Ref: AWS::Region
+          - Ref: AWS::AccountId
+          - ${self:custom.topicName}
 
 # Custom Configuration
 custom: 
