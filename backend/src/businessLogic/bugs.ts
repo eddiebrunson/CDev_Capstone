@@ -28,6 +28,7 @@ export async function createBug(
         userId: userId,
         name: createBugRequest.name,
         dueDate: createBugRequest.dueDate,
+        message: createBugRequest.message,
         createdAt: new Date().toISOString(),
         done: false,
     });

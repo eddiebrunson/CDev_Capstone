@@ -8,4 +8,5 @@ export interface BugItem {
   dueDate: string
   done: boolean
   attachmentUrl?: string
+  message: string
 }
