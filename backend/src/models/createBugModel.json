@@ -7,6 +7,9 @@
       "name": {
         "type": "string"
       },
+      "message": {
+        "type": "string"
+      },
       "dueDate": {
         "type": "string"
       },
@@ -25,7 +28,8 @@
     },
     "required": [
       "name",
-      "dueDate"
+      "dueDate",
+      "message"
     ],
     "additionalProperties": false
 }

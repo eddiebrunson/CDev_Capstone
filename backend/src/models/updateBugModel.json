@@ -6,6 +6,9 @@
       "name": {
         "type": "string"
       },
+      "message": {
+        "type": "string"
+      },
       "dueDate": {
         "type": "string"
       },
@@ -16,7 +19,8 @@
     "required": [
       "name",
       "dueDate",
-      "done"
+      "done",
+      "message"
     ],
     "additionalProperties": true
 }
