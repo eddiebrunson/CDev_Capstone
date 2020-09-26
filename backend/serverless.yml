@@ -23,13 +23,13 @@ provider:
     lambda: true
     apiGateway: true
     iamRoleStatements:
-      - Effect: 'Allow' 
-        Action: 
-          - xray:PutTraceSegments
-          - xray:PutTelemetryRecords
-        Resource: '*'
-    stage: ${opt:stage, 'dev'}
-    region: ${opt:region, 'us-east-1'}
+    - Effect: 'Allow' 
+      Action: 
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
+      Resource: '*'
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
 
   environment: 
     BUGS_TABLE: bugs-${self:provider.stage}
@@ -37,20 +37,12 @@ provider:
     SIGNED_URL_EXPIRATION: 300
     AUTH_0_SECRET: sw1kz_dPufhXOIj4pnq-TdNaHc-fC_7U9y2VjtWf-h_N6K0v7Yx_T0r-AY6NCEw4
     S3_BUCKET_URL: https://${self:provider.environment.S3_BUCKET}.s3.amazonaws.com/
-    UPLOAD_TOPIC_ARN: 
-      Fn::Join:
-        - ':'
-        - - arn:aws:sns
-          - Ref: AWS::Region
-          - Ref: AWS::AccountId
-          - ${self:custom.topicName}
-
 # Custom Configuration
 custom: 
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules: false
-  topicName: UploadTopic-${self:provider.stage}
+
   documentation:
     api:
       info:
@@ -69,7 +61,7 @@ functions:
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
 
-  # GetBugs: lambda function to get all BUG items
+  # TODO: Configure this function
   GetBugs:
     handler: src/lambda/http/getBugs.handler
     events:
@@ -92,7 +84,7 @@ functions:
           - xray:PutTraceSegments
         Resource: "*"
 
-  # CreateBug: lambda function to create Bug items
+  # TODO: Configure this function
   CreateBug:
     handler: src/lambda/http/createBug.handler
     events:
@@ -117,7 +109,7 @@ functions:
           - xray:PutTraceSegments
         Resource: "*"
 
-  # UpdateBug: lambda function to update a BUG
+  # TODO: Configure this function
   UpdateBug:
     handler: src/lambda/http/updateBug.handler
     events:
@@ -140,7 +132,7 @@ functions:
           - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.BUGS_TABLE}
 
-  # DeleteBug: lambda function to delete a BUG
+  # TODO: Configure this function
   DeleteBug:
     handler: src/lambda/http/deleteBug.handler
     events:
@@ -160,7 +152,7 @@ functions:
           - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.BUGS_TABLE}
 
-  # GenerateUploadUrl: lambda function to generate the image upload url
+  # TODO: Configure this function
   GenerateUploadUrl:
     handler: src/lambda/http/generateUploadUrl.handler
     events:
@@ -232,15 +224,11 @@ resources:
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.BUGS_TABLE} 
     
-    # Necessary AWS bucket permissions and policies
+    # TODO: Add any necessary AWS 
     AttachmentsBucket:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${self:provider.environment.S3_BUCKET}
-        NotificationConfiguration:
-          TopicConfigurations:
-            - Event: s3:ObjectCreated:Put
-              Topic: !Ref UploadTopic 
         CorsConfiguration:
           CorsRules:
             -
@@ -272,27 +260,3 @@ resources:
                 - s3:PutObjectAcl
               Resource: 'arn:aws:s3:::${self:provider.environment.S3_BUCKET}/*'
         Bucket: !Ref AttachmentsBucket
-    
-    SNSTopicPolicy: 
-      Type: AWS::SNS::TopicPolicy
-      Properties:
-        PolicyDocument: 
-          Version: "2012-10-17"
-          Statement: 
-            - Effect: Allow 
-              Principal: 
-                AWS: "*"
-              Action: sns:Publish
-              Resource: 
-                !Ref UploadTopic
-              Condition: 
-                ArnLike: 
-                  AWS:SourceArn: arn:aws:s3:::${self:provider.environment.S3_BUCKET}
-        Topics: 
-          - !Ref UploadTopic
-
-    UploadTopic: 
-      Type: AWS::SNS::Topic
-      Properties: 
-        DisplayName: Upload bucket topic
-        TopicName: ${self:custom.topicName}
