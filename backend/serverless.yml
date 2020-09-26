@@ -239,7 +239,7 @@ resources:
         BucketName: ${self:provider.environment.S3_BUCKET}
         NotificationConfiguration:
           TopicConfigurations:
-            - Event: s3:ObjectCreated:PutItem
+            - Event: s3:ObjectCreated:Put
               Topic: !Ref UploadTopic 
         CorsConfiguration:
           CorsRules:
