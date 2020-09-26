@@ -50,7 +50,7 @@ custom:
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules: false
-  topicName: UploadTopic-${self.provider.stage}
+  topicName: UploadTopic-${self:provider.stage}
   documentation:
     api:
       info:
