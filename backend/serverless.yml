@@ -23,13 +23,13 @@ provider:
     lambda: true
     apiGateway: true
     iamRoleStatements:
-    - Effect: 'Allow' 
-      Action: 
-        - xray:PutTraceSegments
-        - xray:PutTelemetryRecords
-      Resource: '*'
-  stage: ${opt:stage, 'dev'}
-  region: ${opt:region, 'us-east-1'}
+      - Effect: 'Allow' 
+        Action: 
+          - xray:PutTraceSegments
+          - xray:PutTelemetryRecords
+        Resource: '*'
+    stage: ${opt:stage, 'dev'}
+    region: ${opt:region, 'us-east-1'}
 
   environment: 
     BUGS_TABLE: bugs-${self:provider.stage}
@@ -235,7 +235,6 @@ resources:
     # Necessary AWS bucket permissions and policies
     AttachmentsBucket:
       Type: AWS::S3::Bucket
-      DependsOn: SNSTopicPolicy
       Properties:
         BucketName: ${self:provider.environment.S3_BUCKET}
         NotificationConfiguration:
